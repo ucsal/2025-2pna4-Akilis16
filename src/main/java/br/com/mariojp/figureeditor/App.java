@@ -14,8 +14,20 @@ public class App {
             frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
             DrawingPanel panel = new DrawingPanel();
+            JButton colorButton = new JButton("Cor...")
+            		;
+			colorButton.addActionListener(e -> {
+				Color chosen = JColorChooser.showDialog(frame, "Escolher Cor", panel.getCurrentColor());
+				if (chosen != null) {
+					panel.setCurrentColor(chosen);
+				}
+			});
 
+			JPanel toolbar = new JPanel();
+			toolbar.add(colorButton);
+			
             frame.setLayout(new BorderLayout());
+			frame.add(toolbar, BorderLayout.NORTH);
             frame.add(panel, BorderLayout.CENTER);
 
             frame.setSize(900, 600);

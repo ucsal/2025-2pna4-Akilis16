@@ -18,9 +18,10 @@ class DrawingPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private static final int DEFAULT_SIZE = 60;
-	private final List<Shape> shapes = new ArrayList<>();
+	private final List<ColoredShape> shapes = new ArrayList<>();
 	private Point startDrag = null, endDrag = null;
 	private ShapeStrategy strategy = new EllipseStrategy();
+	private Color currentColor = new Color(30, 144, 255);
 
 	DrawingPanel() {
 
@@ -54,7 +55,7 @@ class DrawingPanel extends JPanel {
 			public void mouseReleased(MouseEvent e) {
 
 				Shape s = strategy.createShape(startDrag, endDrag);
-				shapes.add(s);
+				shapes.add(new ColoredShape(s, currentColor));
 
 				startDrag = null;
 				endDrag = null;
@@ -66,12 +67,6 @@ class DrawingPanel extends JPanel {
 		addMouseMotionListener(mouse);
 
 	}
-
-	void clear() {
-		shapes.clear();
-		repaint();
-	}
-
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -89,15 +84,29 @@ class DrawingPanel extends JPanel {
 			g2.draw(s);
 		}
 
-		for (Shape s : shapes) {
-			g2.setColor(new Color(30, 144, 255));
-			g2.fill(s);
-			g2.setColor(new Color(0, 0, 0, 70));
+		for (ColoredShape  cs : shapes) {
+			g2.setColor(cs.getColor());
+			g2.fill(cs.getShape());
+			g2.setColor(cs.getColor());
 			g2.setStroke(new BasicStroke(1.2f));
-			g2.draw(s);
+			g2.draw(cs.getShape());
 		}
 
 		g2.dispose();
+	}
+
+	
+	public void setCurrentColor(Color color) {
+		this.currentColor = color;
+	}
+
+	public Color getCurrentColor() {
+		return this.currentColor;
+	}
+	
+	void clear() {
+		shapes.clear();
+		repaint();
 	}
 
 }
